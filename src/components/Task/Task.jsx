@@ -12,6 +12,6 @@ const Task = ({task, deleteTask }) => {
         </div>
     );
 };
-
+                     
 
 export default Task;

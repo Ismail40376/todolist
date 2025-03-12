@@ -1,31 +1,58 @@
-import { useState } from "react";
+import { useState } from 'react';
 import './App.css';
-import Task from "./components/Task/Task";
-
+import AddTaskForm from './components/AddTaskForm/AddTaskForm';
+import Task from './components/Task/Task';
 
 function App() {
+  // стейт для всех задач
   const [tasks, setTasks] = useState([
-    { id: "1", text: "Buy milk" },
-    { id: "2", text: "Wolk whith dog" },
-    { id: "3", text: "Do homework" },
-
+    { id: '1', text: 'Buy milk' },
+    { id: '2', text: 'Wolk with dog' },
+    { id: '3', text: 'Do homework' },
   ]);
+  // стейт для текущей задачи
+  const[currentTask, setCurrentTask] = useState('');
 
-  const deleteTask = (id) => {
+  const deleteTask =(id)=> {
     const arr = tasks.filter(task => task.id != id)
     setTasks(arr)
   }
-  return (
-    <>
-      {
-        tasks.map(task => (
-          <Task
-           key={task.id}
-            task={task}
-             deleteTask={id=> deleteTask(id)} />
 
-        ))
-      }
+  const onInputChange=(e)=> {
+    setCurrentTask(e.target.value)
+  }
+
+
+  const handleAddTask =()=> {
+    if(currentTask.trim() !="") {
+    const newTask = {
+      id: new Date(),
+      text: currentTask
+    }
+    setTasks(prev=> [...prev, newTask])
+    setCurrentTask("")
+  }
+    
+  }
+
+
+  return (
+    <> 
+          <AddTaskForm
+          currentTask={currentTask}
+          onInputChange={(e)=>onInputChange(e)}
+          handleAddTask={handleAddTask}
+          />
+          {
+            tasks.map(task =>(
+              <Task
+              key={task.id}
+              task={task}
+              deleteTask={deleteTask}/>
+            ))
+          }
+        
+      
     </>
   );
 }
